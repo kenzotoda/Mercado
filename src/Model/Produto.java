@@ -10,10 +10,11 @@ public class Produto {
     private String nome;
     private double preco;
 
-    public Produto(int id, String nome, double preco) {
+    public Produto(String nome, double preco) {
         this.id = contadorDeContas;
         this.nome = nome;
         this.preco = preco;
+        contadorDeContas += 1;
     }
 
     public int getId() {
