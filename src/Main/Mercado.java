@@ -1,8 +1,8 @@
 package Main;
 
 import Model.Produto;
+import Utilitarios.Utils;
 
-import java.sql.SQLOutput;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -108,14 +108,30 @@ public class Mercado {
 
             System.out.println("Produto adicionado ao carrinho!");
 
-            System.out.println("Digite 1 para continuar comprando ou 0 para voltar ao menu");
+            System.out.println("Digite 1 --- Continuar comprando");
+            System.out.println("Digite 2 --- Voltar ao menu");
+            System.out.println("Digite 3 --- Remover produtos do carrinho");
+            System.out.println("Digite 4 --- Finalizar compra");
             int acao = input.nextInt();
 
+            while (acao != 1 && acao != 2 && acao != 3 && acao != 4) {
+                System.out.println("Opção inválida!");
+                System.out.println("Digite 1 --- Continuar comprando");
+                System.out.println("Digite 2 --- Voltar ao menu");
+                System.out.println("Digite 3 --- Remover produtos do carrinho");
+                System.out.println("Digite 4 --- Finalizar compra");
+                acao = input.nextInt();
+            }
 
-
-
-
-
+            if (acao == 1) {
+                comprarProdutos();
+            } else if (acao == 2) {
+                menu();
+            } else if (acao == 3) {
+                removerProdutos();
+            } else {
+                finalizarCompra();
+            }
         } else {
             System.out.println("Não há produtos cadastrados");
         }
@@ -128,7 +144,7 @@ public class Mercado {
         if (carrinho.size() > 0) {
             for (Produto p : carrinho.keySet()) {
                 System.out.println("Produto: " + p);
-                System.out.println("Quantidade: " + carrinho.get(p));
+                System.out.println("Quantidade: " + carrinho.get(p) + "\n");
             }
         } else {
             System.out.println("Carrinho vazio!");
@@ -155,7 +171,62 @@ public class Mercado {
         }
     }
 
+    private void finalizarCompra() {
+        double valorTotal = 0.0;
+        System.out.println("*************** RECIBO ***************");
+        for (Produto p : carrinho.keySet()) {
+            System.out.println(p.getNome() + " - " + Utils.doubleToString(p.getPreco()) + " (x " + carrinho.get(p) +
+                    ") = " + Utils.doubleToString(p.getPreco() * carrinho.get(p)));
 
+            valorTotal += (p.getPreco() * carrinho.get(p));
+        }
+
+        System.out.println("TOTAL: " + Utils.doubleToString(valorTotal));
+
+        carrinho.clear();
+
+        System.out.println("Compra finalizada com sucesso, volte sempre!");
+
+        menu();
+    }
+
+    private void removerProdutos() {
+        System.out.println("-------Carrinho de compras-------");
+        for (Produto p : carrinho.keySet()) {
+            System.out.println("Produto: " + p);
+            System.out.println("Quantidade: " + carrinho.get(p) + "\n");
+        }
+
+        System.out.println("Informe o código do produto que será removido: ");
+        int codigoProduto = input.nextInt();
+
+        Produto produtoSelecionado = encontrarProduto(codigoProduto);
+
+        if (produtoSelecionado == null) {
+            System.out.println("Não existe um produto com esse código!");
+            removerProdutos();
+        }
+
+        System.out.println("Produto selecionado: " + produtoSelecionado.getNome());
+        System.out.println("Quantidade: ");
+        int quantidade = input.nextInt();
+
+        if (carrinho.containsKey(produtoSelecionado)) {
+
+            int quantidadeAtual = carrinho.get(produtoSelecionado);
+
+            if (quantidade < 0 || quantidade > quantidadeAtual) {
+                System.out.println("Não é possível remover essa quantidade!");
+                removerProdutos();
+            } else if (quantidade == quantidadeAtual) {
+                carrinho.remove(produtoSelecionado);
+            } else {
+                carrinho.put(produtoSelecionado, quantidadeAtual - quantidade);
+            }
+
+            System.out.println("Produto removido com sucesso!");
+        }
+    }
 
 
 }
