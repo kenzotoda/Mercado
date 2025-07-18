@@ -47,8 +47,4 @@ public class Produto {
         "\nNome: " + this.getNome() +
         "\nPreço: " + Utils.doubleToString(this.getPreco());
     }
-
-
-
-
 }

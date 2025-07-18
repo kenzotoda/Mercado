@@ -2,6 +2,7 @@ package Main;
 
 import Model.Produto;
 
+import java.sql.SQLOutput;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -15,7 +16,7 @@ public class Mercado {
 
     public static void main(String[] args) {
         Mercado mercado = new Mercado();
-        menu();
+        mercado.menu();
     }
 
     public void menu() {
@@ -93,9 +94,23 @@ public class Mercado {
             int codigoProduto = input.nextInt();
 
             Produto produtoSelecionado = encontrarProduto(codigoProduto);
+
+            if (produtoSelecionado == null) {
+                System.out.println("Não existe um produto com esse código!");
+                menu();
+            }
+
             System.out.println("Produto selecionado: " + produtoSelecionado.getNome());
             System.out.println("Quantidade: ");
             int quantidade = input.nextInt();
+
+            adicionarProdutoCarrinho(produtoSelecionado, quantidade);
+
+            System.out.println("Produto adicionado ao carrinho!");
+
+            System.out.println("Digite 1 para continuar comprando ou 0 para voltar ao menu");
+            int acao = input.nextInt();
+
 
 
 
@@ -103,8 +118,22 @@ public class Mercado {
 
         } else {
             System.out.println("Não há produtos cadastrados");
-            menu();
         }
+
+        menu();
+    }
+
+    private void verCarrinho() {
+        System.out.println("-------Carrinho de compras-------");
+        if (carrinho.size() > 0) {
+            for (Produto p : carrinho.keySet()) {
+                System.out.println("Produto: " + p);
+                System.out.println("Quantidade: " + carrinho.get(p));
+            }
+        } else {
+            System.out.println("Carrinho vazio!");
+        }
+        menu();
     }
 
     private Produto encontrarProduto(int codigo) {
@@ -115,6 +144,15 @@ public class Mercado {
             }
         }
         return produto;
+    }
+
+    private void adicionarProdutoCarrinho(Produto produto, int quantidade) {
+        if (carrinho.containsKey(produto)) {
+            int quantidadeAtual = carrinho.get(produto);
+            carrinho.put(produto, quantidadeAtual + quantidade);
+        } else {
+            carrinho.put(produto, quantidade);
+        }
     }
 
 
