@@ -26,34 +26,73 @@ public class Mercado {
         System.out.println("------------------------------------------------------");
         System.out.println("***** Selecione uma operação que deseja realizar *****");
         System.out.println("------------------------------------------------------");
-        System.out.println("|   Opção 1 - Cadastrar     |");
-        System.out.println("|   Opção 2 - Listar        |");
-        System.out.println("|   Opção 3 - Comprar       |");
-        System.out.println("|   Opção 4 - Carrinho      |");
-        System.out.println("|   Opção 5 - Sair          |");
+        System.out.println("|   Opção 1 - Cadastrar                      |");
+        System.out.println("|   Opção 2 - Listar                         |");
+        System.out.println("|   Opção 3 - Comprar                        |");
+        System.out.println("|   Opção 4 - Carrinho                       |");
+        if (carrinho.size() > 0) {
+            System.out.println("|   Opção 5 - Remover produtos do carrinho   |");
+            System.out.println("|   Opção 6 - Finalizar compra               |");
+            System.out.println("|   Opção 7 - Sair                           |");
+        } else {
+            System.out.println("|   Opção 5 - Sair                           |");
+        }
+
 
         int operacao = input.nextInt();
 
-        switch (operacao) {
-            case 1:
-                cadastrarProdutos();
-                break;
-            case 2:
-                listarProdutos();
-                break;
-            case 3:
-                comprarProdutos();
-                break;
-            case 4:
-                verCarrinho();
-                break;
-            case 5:
-                System.out.println("Até mais, Obrigado!");
-                System.exit(0);
-            default:
-                System.out.println("Opção inválida!");
-                menu();
-                break;
+        if (carrinho.size() > 0) {
+            switch (operacao) {
+                case 1:
+                    cadastrarProdutos();
+                    break;
+                case 2:
+                    listarProdutos();
+                    break;
+                case 3:
+                    comprarProdutos();
+                    break;
+                case 4:
+                    verCarrinho();
+                    break;
+                case 5:
+                    removerProdutos();
+                    break;
+                case 6:
+                    finalizarCompra();
+                    break;
+                case 7:
+                    System.out.println("Até mais, Obrigado!");
+                    System.exit(0);
+                    break;
+                default:
+                    System.out.println("Opção inválida!");
+                    menu();
+                    break;
+            }
+        } else {
+            switch (operacao) {
+                case 1:
+                    cadastrarProdutos();
+                    break;
+                case 2:
+                    listarProdutos();
+                    break;
+                case 3:
+                    comprarProdutos();
+                    break;
+                case 4:
+                    verCarrinho();
+                    break;
+                case 5:
+                    System.out.println("Até mais, Obrigado!");
+                    System.exit(0);
+                    break;
+                default:
+                    System.out.println("Opção inválida!");
+                    menu();
+                    break;
+            }
         }
     }
 
@@ -173,7 +212,7 @@ public class Mercado {
 
     private void finalizarCompra() {
         double valorTotal = 0.0;
-        System.out.println("*************** RECIBO ***************");
+        System.out.println("******************** RECIBO ********************");
         for (Produto p : carrinho.keySet()) {
             System.out.println(p.getNome() + " - " + Utils.doubleToString(p.getPreco()) + " (x " + carrinho.get(p) +
                     ") = " + Utils.doubleToString(p.getPreco() * carrinho.get(p)));
@@ -226,6 +265,7 @@ public class Mercado {
 
             System.out.println("Produto removido com sucesso!");
         }
+        menu();
     }
 
 
